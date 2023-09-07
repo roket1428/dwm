@@ -16,17 +16,23 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_red[]         = "#FF0000";
+static const char col_orange[]      = "#FF8800";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeScratchSel]  = { col_gray4, col_cyan,  col_red  },
+	[SchemeScratchNorm] = { col_gray4, col_cyan,  col_orange },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeScratchSel] = { OPAQUE, baralpha, borderalpha },
+	[SchemeScratchNorm] = { OPAQUE, baralpha, borderalpha },
 };
 
 /* tagging */
@@ -37,11 +43,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor  isgame */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Steam",    NULL,       NULL,       0,            0,           -1,      1 },
-	{ "steam_app",NULL,       NULL,       0,            0,           -1,      1 },
+	/* class      instance    title       tags mask     isfloating   monitor  isgame  scratch key */
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1,      0,        0   },
+	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1,      0,        0   },
+	{ "Steam",    NULL,       NULL,       0,            0,           -1,      1,        0   },
+	{ "steam_app",NULL,       NULL,       0,            0,           -1,      1,        0   },
+	{ NULL,       NULL,   "scratchpad",   0,            1,           -1,      0,        's' },
 };
 
 /* layout(s) */
@@ -73,10 +80,14 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+/*First arg only serves to match against key in rules*/
+static const char *scratchpadcmd[] = {"s", "st", "-t", "scratchpad", NULL};
+
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_g,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
