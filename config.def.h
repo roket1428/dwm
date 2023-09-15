@@ -27,6 +27,7 @@ static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeTitle]  = { col_gray4, col_cyan,  col_cyan  },
 	[SchemeScratchSel]  = { col_gray4, col_cyan,  col_red  },
 	[SchemeScratchNorm] = { col_gray4, col_cyan,  col_orange },
 };
@@ -34,6 +35,7 @@ static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitle]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeScratchSel] = { OPAQUE, baralpha, borderalpha },
 	[SchemeScratchNorm] = { OPAQUE, baralpha, borderalpha },
 };
